@@ -1,0 +1,15 @@
+sudo apt-get -y update
+sudo apt-get -y install openjdk-7-jdk maven git xvfb
+cd /tmp
+wget -c wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+sudo dpkg -i google-chrome-*.deb
+sudo apt-get install -yf
+wget "http://chromedriver.storage.googleapis.com/2.11/chromedriver_linux64.zip"
+unzip chromedriver_linux64.zip
+sudo mv chromedriver /usr/local/bin
+export DISPLAY=:10
+Xvfb :10 -screen 0 1366x768x24 -ac &
+cd ~
+git clone https://github.com/mpoehler/htmlsnapshot.git
+cd htmlsnapshot/
+mvn install jetty:run >> ~/mvnout.log
