@@ -1,10 +1,7 @@
 package eu.tuxoo.htmlsnapshot;
 
 import org.apache.commons.io.IOUtils;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 
@@ -42,7 +39,15 @@ public class HtmlSnapShotServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         System.out.println("fetching " + req.getParameter("url"));
         String output = req.getParameter("output");
-        driver.get(req.getParameter("url"));
+
+        // check if driver is available and restart if necessary
+        try {
+            driver.get(req.getParameter("url"));
+        } catch (WebDriverException webDriverException) {
+            if (webDriverException.getMessage().equals("chrome not reachable")) {
+                driver = new ChromeDriver();
+            }
+        }
 
         // sleep 3s to let the driver load and execute everything
         try {
